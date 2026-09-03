@@ -73,11 +73,17 @@ def home():
     total = len(data)
     normal = (data["prediction"] == "NORMAL").sum()
     suspicious = (data["prediction"] == "SUSPICIOUS").sum()
-
     threat_percentage = (
         (suspicious / total) * 100
         if total > 0 else 0
     )
+
+    if threat_percentage < 30:
+        threat_level = "LOW"
+    elif threat_percentage <= 60:
+        threat_level = "MEDIUM"
+    else:
+        threat_level = "HIGH"
 
     latest = data.iloc[-1]
 
@@ -87,8 +93,10 @@ def home():
         normal=normal,
         suspicious=suspicious,
         threat_percentage=round(threat_percentage, 2),
+        threat_level=threat_level,
         latest=latest,
-        message=message
+        message=message,
+        history=data.to_dict("records")
     )
 
 

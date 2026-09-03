@@ -5,3 +5,4 @@ packets,bytes,failed_logins,prediction
 1000,8998,4,NORMAL
 998,9000,9,SUSPICIOUS
 880,5000,3,NORMAL
+1200,9000,7,SUSPICIOUS

@@ -6,32 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>AI Cybersecurity Dashboard</title>
+
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        *
-        input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    margin-top: 5px;
-}
 
-button {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    background: #2563eb;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #1d4ed8;
-}
-         {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -47,6 +28,8 @@ button:hover {
             max-width: 1100px;
             margin: auto;
         }
+
+        /* Header */
 
         .header {
             background: #0f172a;
@@ -64,6 +47,8 @@ button:hover {
         .header p {
             color: #cbd5e1;
         }
+
+        /* Cards */
 
         .cards {
             display: grid;
@@ -106,17 +91,47 @@ button:hover {
             border-left: 6px solid #f59e0b;
         }
 
+        /* Activity */
+
         .activity {
             background: white;
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
         }
 
         .activity h2 {
             margin-bottom: 20px;
             color: #0f172a;
         }
+
+        /* Prediction Form */
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        /* Latest Activity */
 
         .details {
             display: grid;
@@ -141,8 +156,38 @@ button:hover {
         }
 
         .status {
-            color: {% if latest['prediction'] == 'SUSPICIOUS' %}#ef4444{% else %}#22c55e{% endif %};
+            color: {% if latest['prediction'] == 'SUSPICIOUS' %}
+                #ef4444;
+            {% else %}
+                #22c55e;
+            {% endif %}
         }
+
+        /* Prediction History Table */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #0f172a;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Footer */
 
         .footer {
             text-align: center;
@@ -150,7 +195,10 @@ button:hover {
             color: #64748b;
         }
 
+        /* Mobile */
+
         @media (max-width: 800px) {
+
             .cards,
             .details {
                 grid-template-columns: repeat(2, 1fr);
@@ -158,164 +206,382 @@ button:hover {
         }
 
         @media (max-width: 500px) {
+
             .cards,
             .details {
                 grid-template-columns: 1fr;
             }
         }
+
     </style>
 </head>
 
+
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <div class="header">
-            <h1>🛡️ AI Cybersecurity Threat Detection</h1>
-            <p>Machine Learning Based Network Security Monitoring Dashboard</p>
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>🛡️ AI Cybersecurity Threat Detection</h1>
+
+        <p>
+            Machine Learning Based Network Security Monitoring Dashboard
+        </p>
+
+    </div>
+
+
+    <!-- DASHBOARD CARDS -->
+
+    <div class="cards">
+
+        <div class="card total">
+
+            <h3>📊 Total Traffic</h3>
+
+            <div class="number">
+                {{ total }}
+            </div>
+
         </div>
 
-        <div class="cards">
 
-            <div class="card total">
-                <h3>📊 Total Traffic</h3>
-                <div class="number">{{ total }}</div>
-            </div>
+        <div class="card normal">
 
-            <div class="card normal">
-                <h3>🟢 Normal Traffic</h3>
-                <div class="number">{{ normal }}</div>
-            </div>
+            <h3>🟢 Normal Traffic</h3>
 
-            <div class="card suspicious">
-                <h3>🔴 Suspicious Traffic</h3>
-                <div class="number">{{ suspicious }}</div>
-            </div>
-
-            <div class="card threat">
-                <h3>⚠️ Threat Percentage</h3>
-                <div class="number">{{ threat_percentage }}%</div>
+            <div class="number">
+                {{ normal }}
             </div>
 
         </div>
-        <div class="activity" style="margin-bottom: 25px;">
 
-    <h2>🔍 Test Network Traffic</h2>
 
-    <form method="POST">
+        <div class="card suspicious">
 
-        <p>
-            <label>Packets:</label><br>
-            <input type="number" name="packets" required>
-        </p>
+            <h3>🔴 Suspicious Traffic</h3>
 
-        <br>
+            <div class="number">
+                {{ suspicious }}
+            </div>
 
-        <p>
-            <label>Bytes:</label><br>
-            <input type="number" name="bytes" required>
-        </p>
+        </div>
 
-        <br>
 
-        <p>
-            <label>Failed Logins:</label><br>
-            <input type="number" name="failed_logins" required>
-        </p>
+        <div class="card threat">
 
-        <br>
+            <h3>⚠️ Threat Percentage</h3>
 
-        <button type="submit">
-            🚨 Predict Threat
-        </button>
+            <div class="number">
+                {{ threat_percentage }}%
+            </div>
 
-    </form>
+        </div>
 
-    {% if message %}
+
+    </div>
+    <div class="card threat">
+
+    <h3>🚨 Threat Level</h3>
+
+    <div class="number">
+
+        {% if threat_level == "HIGH" %}
+            🔴 HIGH
+
+        {% elif threat_level == "MEDIUM" %}
+            🟡 MEDIUM
+
+        {% else %}
+            🟢 LOW
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+    <!-- PREDICTION FORM -->
+
+    <div class="activity">
+
+        <h2>🔍 Test Network Traffic</h2>
+
+        <form method="POST">
+
+            <p>
+
+                <label>Packets:</label>
+
+                <input
+                    type="number"
+                    name="packets"
+                    required
+                >
+
+            </p>
+
+
+            <br>
+
+
+            <p>
+
+                <label>Bytes:</label>
+
+                <input
+                    type="number"
+                    name="bytes"
+                    required
+                >
+
+            </p>
+
+
+            <br>
+
+
+            <p>
+
+                <label>Failed Logins:</label>
+
+                <input
+                    type="number"
+                    name="failed_logins"
+                    required
+                >
+
+            </p>
+
+
+            <br>
+
+
+            <button type="submit">
+                🚨 Predict Threat
+            </button>
+
+        </form>
+
+
+        {% if message %}
+
         <h3 style="margin-top: 20px;">
             {{ message }}
         </h3>
-    {% endif %}
 
-</div>
+        {% endif %}
 
-        <div class="activity">
+    </div>
 
-            <h2>🔍 Latest Activity</h2>
 
-            <div class="details">
+    <!-- LATEST ACTIVITY -->
 
-                <div class="detail">
-                    <h4>Packets</h4>
-                    <p>{{ latest['packets'] }}</p>
-                </div>
+    <div class="activity">
 
-                <div class="detail">
-                    <h4>Bytes</h4>
-                    <p>{{ latest['bytes'] }}</p>
-                </div>
+        <h2>🔍 Latest Activity</h2>
 
-                <div class="detail">
-                    <h4>Failed Logins</h4>
-                    <p>{{ latest['failed_logins'] }}</p>
-                </div>
+        <div class="details">
 
-                <div class="detail">
-                    <h4>Status</h4>
-                    <p class="status">
-                        {{ latest['prediction'] }}
-                    </p>
-                </div>
+
+            <div class="detail">
+
+                <h4>Packets</h4>
+
+                <p>
+                    {{ latest['packets'] }}
+                </p>
 
             </div>
 
-        </div>
-        <div class="activity" style="margin-top: 25px;">
 
-    <h2>📊 Traffic Analysis</h2>
+            <div class="detail">
 
-    <canvas id="trafficChart"></canvas>
+                <h4>Bytes</h4>
 
-</div>
+                <p>
+                    {{ latest['bytes'] }}
+                </p>
 
-<script>
-    const normal = {{ normal }};
-    const suspicious = {{ suspicious }};
+            </div>
 
-    const ctx = document.getElementById('trafficChart');
 
-    new Chart(ctx, {
-        type: 'bar',
+            <div class="detail">
 
-        data: {
-            labels: ['Normal Traffic', 'Suspicious Traffic'],
+                <h4>Failed Logins</h4>
 
-            datasets: [{
-                label: 'Number of Predictions',
-                data: [normal, suspicious]
-            }]
-        },
+                <p>
+                    {{ latest['failed_logins'] }}
+                </p>
 
-        options: {
-            responsive: true,
+            </div>
 
-            plugins: {
-                legend: {
-                    display: true
-                }
-            }
-        }
-    });
-</script>
 
-        <div class="footer">
-            <p>AI Cybersecurity Threat Detection System | Decision Tree Model</p>
+            <div class="detail">
+
+                <h4>Status</h4>
+
+                <p class="status">
+                    {{ latest['prediction'] }}
+                </p>
+
+            </div>
+
+
         </div>
 
     </div>
 
+
+    <!-- TRAFFIC CHART -->
+
+    <div class="activity">
+
+        <h2>📊 Traffic Analysis</h2>
+
+        <canvas id="trafficChart"></canvas>
+
+    </div>
+
+
+    <!-- PREDICTION HISTORY -->
+
+    <div class="activity">
+
+        <h2>📋 Prediction History</h2>
+
+
+        <table>
+
+            <tr>
+
+                <th>Packets</th>
+
+                <th>Bytes</th>
+
+                <th>Failed Logins</th>
+
+                <th>Prediction</th>
+
+            </tr>
+
+
+            {% for row in history %}
+
+            <tr>
+
+                <td>
+                    {{ row['packets'] }}
+                </td>
+
+                <td>
+                    {{ row['bytes'] }}
+                </td>
+
+                <td>
+                    {{ row['failed_logins'] }}
+                </td>
+
+
+                <td>
+
+                    {% if row['prediction'] == 'SUSPICIOUS' %}
+
+                        🔴 SUSPICIOUS
+
+                    {% else %}
+
+                        🟢 NORMAL
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        <p>
+            AI Cybersecurity Threat Detection System
+            | Decision Tree Model
+        </p>
+
+    </div>
+
+
+</div>
+
+
+<!-- CHART SCRIPT -->
+
+<script>
+
+    const normal = {{ normal }};
+
+    const suspicious = {{ suspicious }};
+
+
+    const ctx =
+        document.getElementById('trafficChart');
+
+
+    new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: [
+                'Normal Traffic',
+                'Suspicious Traffic'
+            ],
+
+            datasets: [{
+
+                label: 'Number of Predictions',
+
+                data: [
+                    normal,
+                    suspicious
+                ]
+
+            }]
+
+        },
+
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+                    display: true
+                }
+
+            }
+
+        }
+
+    });
+
+</script>
+
+
 </body>
 
 </html>
-
-
