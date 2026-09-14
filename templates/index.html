@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>AI Cybersecurity Dashboard</title>
@@ -29,7 +31,9 @@
             margin: auto;
         }
 
-        /* Header */
+        /* =========================
+           HEADER
+        ========================= */
 
         .header {
             background: #0f172a;
@@ -48,11 +52,13 @@
             color: #cbd5e1;
         }
 
-        /* Cards */
+        /* =========================
+           DASHBOARD CARDS
+        ========================= */
 
         .cards {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 20px;
             margin-bottom: 25px;
         }
@@ -91,7 +97,9 @@
             border-left: 6px solid #f59e0b;
         }
 
-        /* Activity */
+        /* =========================
+           ACTIVITY SECTIONS
+        ========================= */
 
         .activity {
             background: white;
@@ -106,7 +114,9 @@
             color: #0f172a;
         }
 
-        /* Prediction Form */
+        /* =========================
+           PREDICTION FORM
+        ========================= */
 
         input {
             width: 100%;
@@ -131,11 +141,13 @@
             background: #1d4ed8;
         }
 
-        /* Latest Activity */
+        /* =========================
+           LATEST ACTIVITY
+        ========================= */
 
         .details {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 15px;
         }
 
@@ -156,14 +168,45 @@
         }
 
         .status {
-            color: {% if latest['prediction'] == 'SUSPICIOUS' %}
+            color:
+            {% if latest['prediction'] == 'SUSPICIOUS' %}
                 #ef4444;
             {% else %}
                 #22c55e;
             {% endif %}
         }
 
-        /* Prediction History Table */
+        /* =========================
+           CONFIDENCE
+        ========================= */
+
+        .confidence {
+            color: #2563eb;
+        }
+
+        /* =========================
+           FEATURE IMPORTANCE
+        ========================= */
+
+        .feature-info {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .feature-info p {
+            color: #64748b;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        #featureChart {
+            max-height: 350px;
+        }
+
+        /* =========================
+           PREDICTION HISTORY
+        ========================= */
 
         table {
             width: 100%;
@@ -187,7 +230,9 @@
             background: #f8fafc;
         }
 
-        /* Footer */
+        /* =========================
+           FOOTER
+        ========================= */
 
         .footer {
             text-align: center;
@@ -195,14 +240,20 @@
             color: #64748b;
         }
 
-        /* Mobile */
+        /* =========================
+           MOBILE
+        ========================= */
 
-        @media (max-width: 800px) {
+        @media (max-width: 1000px) {
 
-            .cards,
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .details {
                 grid-template-columns: repeat(2, 1fr);
             }
+
         }
 
         @media (max-width: 500px) {
@@ -211,9 +262,15 @@
             .details {
                 grid-template-columns: 1fr;
             }
+
+            body {
+                padding: 15px;
+            }
+
         }
 
     </style>
+
 </head>
 
 
@@ -221,7 +278,10 @@
 
 <div class="container">
 
-    <!-- HEADER -->
+
+    <!-- =========================
+         HEADER
+    ========================= -->
 
     <div class="header">
 
@@ -234,9 +294,14 @@
     </div>
 
 
-    <!-- DASHBOARD CARDS -->
+    <!-- =========================
+         DASHBOARD CARDS
+    ========================= -->
 
     <div class="cards">
+
+
+        <!-- TOTAL TRAFFIC -->
 
         <div class="card total">
 
@@ -249,6 +314,8 @@
         </div>
 
 
+        <!-- NORMAL TRAFFIC -->
+
         <div class="card normal">
 
             <h3>🟢 Normal Traffic</h3>
@@ -259,6 +326,8 @@
 
         </div>
 
+
+        <!-- SUSPICIOUS TRAFFIC -->
 
         <div class="card suspicious">
 
@@ -271,6 +340,8 @@
         </div>
 
 
+        <!-- THREAT PERCENTAGE -->
+
         <div class="card threat">
 
             <h3>⚠️ Threat Percentage</h3>
@@ -282,36 +353,49 @@
         </div>
 
 
+        <!-- THREAT LEVEL -->
+
+        <div class="card threat">
+
+            <h3>🚨 Threat Level</h3>
+
+            <div class="number">
+
+                {% if threat_level == "HIGH" %}
+
+                    🔴 HIGH
+
+                {% elif threat_level == "MEDIUM" %}
+
+                    🟡 MEDIUM
+
+                {% else %}
+
+                    🟢 LOW
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
     </div>
-    <div class="card threat">
-
-    <h3>🚨 Threat Level</h3>
-
-    <div class="number">
-
-        {% if threat_level == "HIGH" %}
-            🔴 HIGH
-
-        {% elif threat_level == "MEDIUM" %}
-            🟡 MEDIUM
-
-        {% else %}
-            🟢 LOW
-
-        {% endif %}
-
-    </div>
-
-</div>
 
 
-    <!-- PREDICTION FORM -->
+    <!-- =========================
+         PREDICTION FORM
+    ========================= -->
 
     <div class="activity">
 
         <h2>🔍 Test Network Traffic</h2>
 
+
         <form method="POST">
+
+
+            <!-- PACKETS -->
 
             <p>
 
@@ -329,6 +413,8 @@
             <br>
 
 
+            <!-- BYTES -->
+
             <p>
 
                 <label>Bytes:</label>
@@ -344,6 +430,8 @@
 
             <br>
 
+
+            <!-- FAILED LOGINS -->
 
             <p>
 
@@ -361,9 +449,14 @@
             <br>
 
 
+            <!-- BUTTON -->
+
             <button type="submit">
+
                 🚨 Predict Threat
+
             </button>
+
 
         </form>
 
@@ -371,22 +464,30 @@
         {% if message %}
 
         <h3 style="margin-top: 20px;">
+
             {{ message }}
+
         </h3>
 
         {% endif %}
 
+
     </div>
 
 
-    <!-- LATEST ACTIVITY -->
+    <!-- =========================
+         LATEST ACTIVITY
+    ========================= -->
 
     <div class="activity">
 
         <h2>🔍 Latest Activity</h2>
 
+
         <div class="details">
 
+
+            <!-- PACKETS -->
 
             <div class="detail">
 
@@ -399,6 +500,8 @@
             </div>
 
 
+            <!-- BYTES -->
+
             <div class="detail">
 
                 <h4>Bytes</h4>
@@ -409,6 +512,8 @@
 
             </div>
 
+
+            <!-- FAILED LOGINS -->
 
             <div class="detail">
 
@@ -421,12 +526,31 @@
             </div>
 
 
+            <!-- STATUS -->
+
             <div class="detail">
 
                 <h4>Status</h4>
 
                 <p class="status">
+
                     {{ latest['prediction'] }}
+
+                </p>
+
+            </div>
+
+
+            <!-- CONFIDENCE -->
+
+            <div class="detail">
+
+                <h4>Confidence</h4>
+
+                <p class="confidence">
+
+                    {{ latest['confidence'] }}%
+
                 </p>
 
             </div>
@@ -437,7 +561,9 @@
     </div>
 
 
-    <!-- TRAFFIC CHART -->
+    <!-- =========================
+         TRAFFIC ANALYSIS
+    ========================= -->
 
     <div class="activity">
 
@@ -445,10 +571,130 @@
 
         <canvas id="trafficChart"></canvas>
 
+
+        <br>
+        <br>
+
+
+        <!-- =========================
+             THREAT DISTRIBUTION
+        ========================= -->
+
+        <h2>🍩 Threat Distribution</h2>
+
+        <canvas id="threatChart"></canvas>
+
+
+        <br>
+        <br>
+
+
+        <!-- =========================
+             THREAT RISK METER
+        ========================= -->
+
+        <h2>⚠️ Threat Risk Meter</h2>
+
+
+        <div style="text-align: center; padding: 20px;">
+
+
+            <div style="
+                width: 180px;
+                height: 180px;
+                border-radius: 50%;
+                margin: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                background: conic-gradient(
+                    #ef4444 {{ threat_percentage }}%,
+                    #e2e8f0 {{ threat_percentage }}%
+                );
+
+            ">
+
+
+                <div style="
+                    width: 130px;
+                    height: 130px;
+                    border-radius: 50%;
+                    background: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                ">
+
+
+                    <strong style="font-size: 28px;">
+
+                        {{ threat_percentage }}%
+
+                    </strong>
+
+
+                    <span>
+
+                        Threat
+
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+            <p style="
+                margin-top: 15px;
+                color: #64748b;
+            ">
+
+                Percentage of suspicious traffic detected
+
+            </p>
+
+
+        </div>
+
+
     </div>
 
 
-    <!-- PREDICTION HISTORY -->
+    <!-- =========================
+         FEATURE IMPORTANCE
+    ========================= -->
+
+    <div class="activity">
+
+        <h2>🌳 Feature Importance</h2>
+
+
+        <div class="feature-info">
+
+            <p>
+
+                Shows which network features contributed most
+                to the Decision Tree model's predictions.
+
+            </p>
+
+
+            <canvas id="featureChart"></canvas>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         PREDICTION HISTORY
+    ========================= -->
 
     <div class="activity">
 
@@ -457,33 +703,59 @@
 
         <table>
 
+
+            <!-- TABLE HEADER -->
+
             <tr>
 
-                <th>Packets</th>
+                <th>
+                    Packets
+                </th>
 
-                <th>Bytes</th>
+                <th>
+                    Bytes
+                </th>
 
-                <th>Failed Logins</th>
+                <th>
+                    Failed Logins
+                </th>
 
-                <th>Prediction</th>
+                <th>
+                    Prediction
+                </th>
+
+                <th>
+                    Confidence
+                </th>
 
             </tr>
 
+
+            <!-- TABLE DATA -->
 
             {% for row in history %}
 
             <tr>
 
+
                 <td>
+
                     {{ row['packets'] }}
+
                 </td>
 
+
                 <td>
+
                     {{ row['bytes'] }}
+
                 </td>
 
+
                 <td>
+
                     {{ row['failed_logins'] }}
+
                 </td>
 
 
@@ -501,22 +773,36 @@
 
                 </td>
 
+
+                <td>
+
+                    {{ row['confidence'] }}%
+
+                </td>
+
+
             </tr>
 
             {% endfor %}
 
+
         </table>
+
 
     </div>
 
 
-    <!-- FOOTER -->
+    <!-- =========================
+         FOOTER
+    ========================= -->
 
     <div class="footer">
 
         <p>
+
             AI Cybersecurity Threat Detection System
             | Decision Tree Model
+
         </p>
 
     </div>
@@ -525,14 +811,25 @@
 </div>
 
 
-<!-- CHART SCRIPT -->
+<!-- =========================
+     CHART JAVASCRIPT
+========================= -->
 
 <script>
+
+
+    /* =========================
+       BASIC DATA
+    ========================= */
 
     const normal = {{ normal }};
 
     const suspicious = {{ suspicious }};
 
+
+    /* =========================
+       BAR CHART
+    ========================= */
 
     const ctx =
         document.getElementById('trafficChart');
@@ -542,20 +839,29 @@
 
         type: 'bar',
 
+
         data: {
 
             labels: [
+
                 'Normal Traffic',
+
                 'Suspicious Traffic'
+
             ],
+
 
             datasets: [{
 
                 label: 'Number of Predictions',
 
+
                 data: [
+
                     normal,
+
                     suspicious
+
                 ]
 
             }]
@@ -567,10 +873,13 @@
 
             responsive: true,
 
+
             plugins: {
 
                 legend: {
+
                     display: true
+
                 }
 
             }
@@ -578,6 +887,145 @@
         }
 
     });
+
+
+
+    /* =========================
+       DOUGHNUT CHART
+    ========================= */
+
+    const threatCtx =
+        document.getElementById('threatChart');
+
+
+    new Chart(threatCtx, {
+
+        type: 'doughnut',
+
+
+        data: {
+
+            labels: [
+
+                'Normal Traffic',
+
+                'Suspicious Traffic'
+
+            ],
+
+
+            datasets: [{
+
+                label: 'Traffic Distribution',
+
+
+                data: [
+
+                    normal,
+
+                    suspicious
+
+                ]
+
+            }]
+
+        },
+
+
+        options: {
+
+            responsive: true,
+
+
+            plugins: {
+
+                legend: {
+
+                    display: true,
+
+                    position: 'bottom'
+
+                }
+
+            }
+
+        }
+
+    });
+
+
+
+    /* =========================
+       FEATURE IMPORTANCE CHART
+    ========================= */
+
+
+    const featureNames =
+        {{ feature_names | tojson }};
+
+
+    const featureValues =
+        {{ feature_values | tojson }};
+
+
+    const featureCtx =
+        document.getElementById('featureChart');
+
+
+    new Chart(featureCtx, {
+
+        type: 'bar',
+
+
+        data: {
+
+            labels: featureNames,
+
+
+            datasets: [{
+
+                label: 'Importance',
+
+
+                data: featureValues
+
+            }]
+
+        },
+
+
+        options: {
+
+            responsive: true,
+
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    max: 1
+
+                }
+
+            },
+
+
+            plugins: {
+
+                legend: {
+
+                    display: true
+
+                }
+
+            }
+
+        }
+
+    });
+
 
 </script>
 
